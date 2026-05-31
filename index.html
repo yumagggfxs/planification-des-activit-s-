@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation Direction - TaskNotify Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #94a3b8;
+            --sidebar-hover: #1e293b;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-dark: #1e293b;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- MENU LATÉRAL --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 0 24px 30px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .logo i { color: var(--accent); }
+
+        .menu-list {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: var(--sidebar-hover);
+            color: white;
+            border-left: 4px solid var(--accent);
+        }
+
+        .menu-item i { font-size: 18px; width: 25px; }
+
+        /* --- ZONE CONTENU --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            background-color: var(--card-bg);
+            height: 70px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .user-profile i { font-size: 24px; color: var(--accent); }
+
+        .container { padding: 40px; max-width: 1100px; }
+
+        /* Bouton d'activation spécial Sécurité */
+        .activation-banner {
+            background-color: #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-activate {
+            background: white;
+            color: #ef4444;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Cartes de statistiques */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-number { font-size: 28px; font-weight: bold; margin-top: 5px; }
+        .stat-label { color: #64748b; font-size: 14px; }
+        .stat-icon { font-size: 32px; color: var(--accent); background: #eff6ff; padding: 15px; border-radius: 8px; }
+
+        /* Grille du Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card h3 { margin-top: 0; margin-bottom: 20px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 6px; }
+        input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--accent); }
+        
+        .btn-submit { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .btn-submit:hover { background-color: var(--accent-hover); }
+
+        /* Tableau */
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background-color: #f1f5f9; color: #475569; font-weight: 600; }
+        .badge { background-color: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        
+        .btn-delete { background: none; border: none; color: #ef4444; cursor: pointer; padding: 0; }
+        .btn-delete:hover { color: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>TaskNotify Pro</span>
+        </div>
+        <ul class="menu-list">
+            <a class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Vue générale</a>
+            <a class="menu-item"><i class="fa-solid fa-list-check"></i> Mes Programmes</a>
+            <a class="menu-item"><i class="fa-solid fa-bell"></i> Notifications</a>
+            <a class="menu-item"><i class="fa-solid fa-calendar-days"></i> Calendrier</a>
+            <a class="menu-item"><i class="fa-solid fa-sliders"></i> Paramètres</a>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="topbar">
+            <h2 style="margin:0; font-size: 22px;">Tableau de bord</h2>
+            <div class="user-profile">
+                <i class="fa-solid fa-circle-user"></i>
+                <span>Session Directeur</span>
+            </div>
+        </div>
+
+        <div class="container">
+            
+            <div class="activation-banner" id="banniereSecurite">
+                <span>⚠️ ÉTAPE 1 : Cliquez sur le bouton pour activer les droits système (Sons + Vibrations)</span>
+                <button class="btn-activate" onclick="activerSysteme()">INITIALISER LA DÉMO</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-label">Total Tâches</div>
+                        <div class="stat-number" id="statTotal">0</div>
+                    </div>
+                    <i class="fa-solid fa-layer-group stat-icon"></i>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-label">En attente</div>
+                        <div class="stat-number" id="statAttente" style="color: #3b82f6;">0</div>
+                    </div>
+                    <i class="fa-solid fa-hourglass-half stat-icon" style="color: #3b82f6;"></i>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <div class="stat-label">Rappels Émis</div>
+                        <div class="stat-number" id="statEnvoyes" style="color: #10b981;">0</div>
+                    </div>
+                    <i class="fa-solid fa-circle-check stat-icon" style="color: #10b981;"></i>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3><i class="fa-solid fa-plus" style="color: var(--accent);"></i> Nouveau rappel</h3>
+                    <div class="form-group">
+                        <label>Description de l'activité</label>
+                        <input type="text" id="taskName" placeholder="Ex: Signature du budget annuel">
+                    </div>
+                    <div class="form-group">
+                        <label>Déclenchement (dans combien de secondes ?)</label>
+                        <input type="number" id="taskSeconds" placeholder="Ex: 10" min="1">
+                    </div>
+                    <button class="btn-submit" onclick="creerRappel()">Planifier l'activité</button>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fa-solid fa-table-list" style="color: var(--accent);"></i> Surveillance des activités</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Activité</th>
+                                <th>Compte à rebours</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableauCorps"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let taches = [];
+        let compteurEnvoyes = 0;
+        let boucleVibration = null;
+        let boucleAudio = null;
+        let systemePret = false;
+
+        // Générateur audio intégré pour simuler le réveil (aucun fichier externe requis)
+        const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+
+        function activerSysteme() {
+            // Débloquer l'audio
+            if (ctxAudio.state === 'suspended') {
+                ctxAudio.resume();
+            }
+            // Demander les notifications
+            if (window.Notification) {
+                Notification.requestPermission();
+            }
+            
+            systemePret = true;
+            document.getElementById('banniereSecurite').style.backgroundColor = "#10b981";
+            document.getElementById('banniereSecurite').innerHTML = "<span>✅ SYSTÈME PRÊT : Les droits de vibration et de son sont débloqués.</span>";
+        }
+
+        function faireBiperLePC() {
+            // Génère un bip strident de réveil
+            const osc = ctxAudio.createOscillator();
+            const gain = ctxAudio.createGain();
+            osc.type = "sawtooth"; 
+            osc.frequency.value = 880; // Note aigue
+            gain.gain.setValueAtTime(0.1, ctxAudio.currentTime);
+            osc.connect(gain);
+            gain.connect(ctxAudio.destination);
+            osc.start();
+            osc.stop(ctxAudio.currentTime + 0.3); // Le bip dure 0.3 seconde
+        }
+
+        function creerRappel() {
+            if (!systemePret) {
+                alert("Veuillez d'abord cliquer sur le bouton rouge 'INITIALISER LA DÉMO' en haut pour débloquer les sécurités du navigateur !");
+                return;
+            }
+
+            const nom = document.getElementById('taskName').value.trim();
+            const secondes = parseInt(document.getElementById('taskSeconds').value);
+
+            if (!nom || isNaN(secondes) || secondes <= 0) {
+                alert("Veuillez entrer une description et un nombre de secondes valide.");
+                return;
+            }
+
+            taches.push({
+                id: Date.now(),
+                nom: nom,
+                tempsRestant: secondes
+            });
+
+            document.getElementById('taskName').value = '';
+            document.getElementById('taskSeconds').value = '';
+            mettreAJourDashboard();
+        }
+
+        function mettreAJourDashboard() {
+            const corps = document.getElementById('tableauCorps');
+            corps.innerHTML = '';
+
+            taches.forEach(t => {
+                corps.innerHTML += `
+                    <tr>
+                        <td><strong>${t.nom}</strong></td>
+                        <td><span style="color:#ef4444; font-weight:bold;">${t.tempsRestant}s</span></td>
+                        <td><span class="badge">Surveillance</span></td>
+                        <td><button class="btn-delete" onclick="supprimer(${t.id})"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('statTotal').innerText = taches.length + compteurEnvoyes;
+            document.getElementById('statAttente').innerText = taches.length;
+            document.getElementById('statEnvoyes').innerText = compteurEnvoyes;
+        }
+
+        function supprimer(id) {
+            taches = taches.filter(t => t.id !== id);
+            mettreAJourDashboard();
+        }
+
+        // --- HORLOGE DE SURVEILLANCE ET GESTION DU REVEIL CONTINU ---
+        setInterval(() => {
+            if (taches.length === 0) return;
+
+            taches.forEach((t, index) => {
+                t.tempsRestant--;
+
+                if (t.tempsRestant <= 0) {
+                    // Supprimer immédiatement de la liste avant l'affichage du pop-up bloquant
+                    taches.splice(index, 1);
+                    mettreAJourDashboard();
+
+                    // 1. Déclencher le VIBREUR en boucle (toutes les 1 seconde)
+                    if ("vibrate" in navigator) {
+                        boucleVibration = setInterval(() => {
+                            navigator.vibrate([400, 200]);
+                        }, 600);
+                    }
+
+                    // 2. Déclencher le SON DE SECOURS (Bip PC) en boucle (toutes les 0.5 seconde)
+                    boucleAudio = setInterval(() => {
+                        faireBiperLePC();
+                    }, 500);
+
+                    // 3. Notification système classique
+                    if (window.Notification && Notification.permission === "granted") {
+                        new Notification("TaskNotify Pro", { body: `C'est l'heure de : ${t.nom}` });
+                    }
+
+                    // 4. POP-UP DE BLOCAGE (Arrête l'exécution du code tant qu'on ne clique pas)
+                    // La vibration et les bips tournent pendant que ce message est affiché !
+                    alert(`🚨 ALERTE CRITIQUE - TASKNOTIFY PRO\n\nL'activité suivante requiert votre attention :\n\n👉 "${t.nom}"\n\n[Cliquez sur OK pour couper l'alarme et arrêter les vibrations/bips]`);
+
+                    // 5. COUPURE DES ALARMES une fois que le directeur clique sur OK
+                    if (boucleVibration) clearInterval(boucleVibration);
+                    if (boucleAudio) clearInterval(boucleAudio);
+                    if ("vibrate" in navigator) navigator.vibrate(0); // Stop net la vibration
+
+                    compteurEnvoyes++;
+                    document.getElementById('statEnvoyes').innerText = compteurEnvoyes;
+                }
+            });
+
+            mettreAJourDashboard();
+        }, 1000);
+    </script>
+</body>
+</html>
